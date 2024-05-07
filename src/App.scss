@@ -1,0 +1,82 @@
+#root * {
+	// * Кольори
+	--primary-color: indi;
+	// --secondary-color: #F75C48;
+	// --secondary-lighter-color: #F9948A;
+	// --secondary-darker-color: #CC4A38;
+	// --pale-color: #878787;
+	// --bg-color: white;
+
+	// * Анімації
+
+	transition-duration: 0.3s;
+}
+
+// * Стилі тексту
+
+// .primary-text {
+// 	color: var(--primary-color);
+// 	font-size: 15px;
+// 	font-family: "PT Sans", sans-serif;
+// 	font-weight: 400;
+// 	letter-spacing: 0.03em;
+// 	line-height: 1.32em;
+
+// 	p:not(:last-of-type) {
+// 		padding-bottom: 17px;
+// 	}
+// }
+
+// .title-large {
+// 	color: var(--primary-color);
+// 	font-family: "Noto Sans JP", sans-serif;
+// 	font-size: 36px;
+// 	font-weight: 500;
+
+// 	text-align: center;
+// 	padding-top: 40px;
+// 	padding-bottom: 47px;
+// }
+
+// .label-large {
+// 	color: var(--primary-color);
+// 	font-size: 22px;
+// 	line-height: 30px;
+// 	font-family: "Noto Sans JP", sans-serif;
+// 	font-weight: 500;
+// 	letter-spacing: -0.01em;
+// 	text-align: center;
+// }
+
+// .label-medium {
+// 	color: var(--pale-color);
+// 	font-size: 15px;
+// 	font-family: "PT Sans", sans-serif;
+// 	font-weight: 400;
+// 	letter-spacing: 0.03em;
+// }
+
+// .label-small {
+// 	color: var(--primary-color);
+// 	font-size: 11px;
+// 	font-family: "PT Sans", sans-serif;
+// 	font-weight: 400;
+// 	letter-spacing: 0.045em;
+// 	line-height: 1.27em;
+
+// 	p:not(:last-of-type) {
+// 		padding-bottom: 17px;
+// 	}
+// }
+
+// .link {
+// 	@extend .label-large;
+// 	color: var(--secondary-color);
+
+// 	&:hover {
+// 		cursor: pointer;
+// 		color: var(--secondary-darker-color);
+// 	}
+// }
+
+// * Загальні стилі
