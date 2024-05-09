@@ -1,1 +1,32 @@
 @import url("./reset.css");
+
+body>#root {
+	height: 100%;
+}
+
+body {
+	background-color: #fafafa;
+}
+
+.flexColumn {
+	display: flex;
+	flex-direction: column;
+	min-height: 100%;
+
+	.flexCenteredColumn {
+		display: flex;
+		flex-direction: column;
+		align-self: center;
+		align-items: stretch;
+		width: 100%;
+		max-width: 1200px;
+	}
+
+	.expanded {
+		flex-grow: 1;
+	}
+
+	.centered {
+		align-self: center;
+	}
+}

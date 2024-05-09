@@ -10,8 +10,13 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import React from "react";
 import { ComponentType } from "../models/component_types";
-import AssemblyCell from "./AssemblyCell";
+import ComponentCard from "./ComponentCard";
+import { useNavigate } from "react-router-dom";
 import { useAssembly } from "../store/assembly_store";
+import {
+  useLoadComponentList,
+  setComponentType,
+} from "../store/component_list_store";
 
 interface CellsAccordionProps {
   summaryText: string;
@@ -22,8 +27,16 @@ const CellsAccordion: React.FC<CellsAccordionProps> = ({
   summaryText,
   componentType,
 }) => {
+  const navigate = useNavigate();
+
   const components = useAssembly().components[componentType];
   const componentList = Object.entries(components); // [id: component]
+
+  const handleAdd = () => {
+    navigate("/component_list");
+    setComponentType(componentType);
+    useLoadComponentList();
+  };
 
   return (
     <>
@@ -31,6 +44,7 @@ const CellsAccordion: React.FC<CellsAccordionProps> = ({
         defaultExpanded
         sx={{
           boxShadow: "none",
+          backgroundColor: "inherit",
         }}
       >
         <AccordionSummary
@@ -41,34 +55,21 @@ const CellsAccordion: React.FC<CellsAccordionProps> = ({
         <AccordionDetails>
           <Grid container spacing={2} flexDirection={"column"}>
             {componentList.map((component) => (
-              <Grid key={component[0]} item>
-                <AssemblyCell
+              <Grid item key={component[0]}>
+                <ComponentCard
                   componentId={parseInt(component[0])}
                   component={component[1]}
+                  isAssemblyComponent
                 />
               </Grid>
             ))}
-
-            {/* {!componentList.length && (
-              <Grid item>
-                <Typography
-                  variant="h4"
-                  component="div"
-                  textAlign="center"
-                  color="text.secondary"
-                  sx={{ fontSize: "1.5rem" }}
-                >
-                  Не обрано
-                </Typography>
-              </Grid>
-            )} */}
-
             <Grid item>
               <Button
                 size="large"
                 color="primary"
                 fullWidth
                 sx={{ fontSize: "1.5rem" }}
+                onClick={handleAdd}
               >
                 {componentList.length ? "Додати" : "Обрати"}
               </Button>

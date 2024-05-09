@@ -7,7 +7,7 @@ import { PCComponent, Spec } from "./pc_component";
  *
  * значення - масив значень для фільтрації за характеристикою
  */
-type Filters = { [specName: string]: unknown[] };
+export type Filters = { [specName: string]: unknown[] };
 
 /**
  * ключ - id комплектуючщого у збірці
@@ -32,14 +32,14 @@ export class Assembly implements AssemblyData {
   }
 
   components: Record<ComponentType, { [id: number]: PCComponent }> = {
-    [ComponentType.MOTHERBOARD]: [],
-    [ComponentType.CPU]: [],
-    [ComponentType.GPU]: [],
-    [ComponentType.RAM]: [],
-    [ComponentType.SSD]: [],
-    [ComponentType.HDD]: [],
-    [ComponentType.POWER_SUPPLY]: [],
-    [ComponentType.CASE]: [],
+    [ComponentType.MOTHERBOARD]: {},
+    [ComponentType.CPU]: {},
+    [ComponentType.GPU]: {},
+    [ComponentType.RAM]: {},
+    [ComponentType.SSD]: {},
+    [ComponentType.HDD]: {},
+    [ComponentType.POWER_SUPPLY]: {},
+    [ComponentType.CASE]: {},
     // ! [ComponentType.CPU_COOLER]: [],
     // ! [ComponentType.FAN]: [],
   };

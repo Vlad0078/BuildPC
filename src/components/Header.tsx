@@ -22,7 +22,6 @@ const Header: React.FC = () => {
         <Typography
           component="div"
           sx={{
-            flexGrow: 1,
             fontFamily: "Black Ops One, Roboto",
             fontSize: 42,
             ":hover": {
@@ -30,7 +29,7 @@ const Header: React.FC = () => {
               userSelect: "none",
             },
           }}
-          onClick={() => handleLogoClick}
+          onClick={handleLogoClick}
         >
           BuildPC
         </Typography>

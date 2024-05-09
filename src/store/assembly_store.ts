@@ -12,6 +12,7 @@ const initialAssemblyState: AssemblyState = {
   assembly: new Assembly(),
 };
 
+// !
 initialAssemblyState.assembly.addComponent(
   new CPU({
     id: 3534,
