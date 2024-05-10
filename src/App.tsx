@@ -14,7 +14,6 @@ function App() {
         container
         flexDirection="column"
         alignSelf="center"
-        id="hi"
         flexGrow={1}
         maxWidth="lg"
       >

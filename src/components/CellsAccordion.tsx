@@ -13,10 +13,7 @@ import { ComponentType } from "../models/component_types";
 import ComponentCard from "./ComponentCard";
 import { useNavigate } from "react-router-dom";
 import { useAssembly } from "../store/assembly_store";
-import {
-  useLoadComponentList,
-  setComponentType,
-} from "../store/component_list_store";
+import { loadComponentList } from "../store/assembly_store";
 
 interface CellsAccordionProps {
   summaryText: string;
@@ -34,8 +31,7 @@ const CellsAccordion: React.FC<CellsAccordionProps> = ({
 
   const handleAdd = () => {
     navigate("/component_list");
-    setComponentType(componentType);
-    useLoadComponentList();
+    loadComponentList(componentType);
   };
 
   return (

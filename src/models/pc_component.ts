@@ -6,7 +6,7 @@ export class Spec<T> {
   constructor(
     public name: string,
     public value: T,
-    componentType?: ComponentType
+    componentType: ComponentType
   ) {
     this.prettyName = name;
     this.prettyValue = String(value);
@@ -28,48 +28,48 @@ export class Spec<T> {
     // встановлюємо значення для prettyName та prettyValue залежно від категорії, до якої належить name характеристики
     if (this.name in stringSpecNames) {
       this.prettyName = stringSpecNames[this.name];
-      this.prettyName = "$value".replace(/[\n\t]/g, ""); // !
+      this.prettyValue = `${this.value}`.replace(/[\n\t]/g, ""); // !
     } else if (this.name in intSpecNames) {
       this.prettyName = intSpecNames[this.name];
       switch (this.name) {
         case "psu_power":
-          this.prettyValue = "$value Вт";
+          this.prettyValue = `${this.value} Вт`;
           break;
         case "volume":
-          this.prettyValue = "$value Гб";
+          this.prettyValue = `${this.value} Гб`;
           break;
         default:
-          this.prettyValue = "$value";
+          this.prettyValue = `${this.value}`;
       }
     } else if (this.name in floatSpecNames) {
       this.prettyName = floatSpecNames[this.name];
-      this.prettyValue = "$value";
+      this.prettyValue = `${this.value}`;
     } else if (this.name in boolSpecNames) {
       this.prettyName = boolSpecNames[this.name];
       this.prettyValue = this.value == 1 ? "так" : "немає";
     } else if (this.name in freqSpecNames) {
       this.prettyName = freqSpecNames[this.name];
-      this.prettyValue = "$value МГц";
+      this.prettyValue = `${this.value} МГц`;
     } else if (this.name in otherSpecNames) {
       this.prettyName = otherSpecNames[this.name];
       switch (this.name) {
         case "lan_speed":
-          this.prettyValue = "$value Мбіт";
+          this.prettyValue = `${this.value} Мбіт`;
           break;
         case "has_cooler":
           this.prettyValue = this.value == 1 ? "кулер у комплекті" : "немає";
           break;
         case "volume":
-          this.prettyValue = "$value Мб";
+          this.prettyValue = `${this.value} Мб`;
           break;
         case "power_consumption":
-          this.prettyValue = "$value Вт";
+          this.prettyValue = `${this.value} Вт`;
           break;
         case "has_psu":
           this.prettyValue = this.value == 1 ? "з блоком живлення" : "немає";
           break;
         default:
-          this.prettyValue = "$value";
+          this.prettyValue = `${this.value}`;
       }
     } else {
       this.prettyName = "undefined spec name";

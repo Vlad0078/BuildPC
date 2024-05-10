@@ -1,24 +1,25 @@
 import React, { useEffect } from "react";
-import { useComponentList } from "../store/component_list_store";
-import { ListLoadingState as LoadingState } from "../store/component_list_store";
-import { useNavigate } from "react-router-dom";
-import SearchIcon from "@mui/icons-material/Search";
 import {
-  CircularProgress,
-  Grid,
-  IconButton,
-  InputAdornment,
-  OutlinedInput,
-} from "@mui/material";
+  ListLoadingState as LoadingState,
+  useComponentList,
+  useListComponentType,
+  useListLoadingState,
+} from "../store/assembly_store";
+import { useNavigate } from "react-router-dom";
+import { CircularProgress, Grid } from "@mui/material";
 import ComponentCard from "../components/ComponentCard";
+import SearchAndFilter from "../components/SearchAndFilter";
 
 const ComponentListPage: React.FC = () => {
   const navigate = useNavigate();
 
-  const { components, componentType, loadingState } = useComponentList();
+  const components = useComponentList();
+  const componentType = useListComponentType();
+  const loadingState = useListLoadingState();
 
   useEffect(() => {
     // якщо сторінку відкрили через рядок браузера і componentType не вказаний - повертаємо null і переходимо на сторінку збірки
+    // ! його треба скидати при розмонтуванні сторінки, якщо зберігати збірку
     !componentType && navigate("/");
   }, [componentType, navigate]);
 
@@ -31,44 +32,31 @@ const ComponentListPage: React.FC = () => {
         // поле пошуку лише якщо комплектуючі вже було завантажено
         (loadingState === LoadingState.LOADED ||
           (loadingState === LoadingState.LOADING &&
-            components.length !== 0)) && (
-          <Grid item>
-            <OutlinedInput
-              fullWidth
-              placeholder="Пошук за назвою"
-              type="search"
-              sx={{ marginBottom: 1 }}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton aria-label="search">
-                    <SearchIcon />
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-          </Grid>
-        )
+            components.length !== 0)) && <SearchAndFilter />
       }
-      {loadingState === LoadingState.LOADING ? (
-        <>
-          <Grid
-            container
-            flexDirection="column"
-            alignContent="center"
-            justifyContent="center"
-            flexGrow={1}
-          >
-            <CircularProgress />
+      {
+        loadingState === LoadingState.LOADING ? (
+          <>
+            <Grid
+              container
+              flexDirection="column"
+              alignContent="center"
+              justifyContent="center"
+              flexGrow={1}
+            >
+              <CircularProgress size="8rem" />
+            </Grid>
+          </>
+        ) : LoadingState.LOADED ? (
+          <Grid container flexDirection="column" spacing={1}>
+            {components.map((component) => (
+              <Grid item key={component.id}>
+                <ComponentCard component={component} />
+              </Grid>
+            ))}
           </Grid>
-        </>
-      ) : LoadingState.LOADED ? (
-        components.map((component) => (
-          <Grid item key={component.id}>
-            <ComponentCard component={component} />
-          </Grid>
-        ))
-      ) : null}{" "}
-      // !
+        ) : null // !
+      }
     </Grid>
   );
 };

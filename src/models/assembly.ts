@@ -1,6 +1,6 @@
 import cloneDeep from "lodash.clonedeep";
 import { ComponentType } from "./component_types";
-import { PCComponent, Spec } from "./pc_component";
+import { PCComponent } from "./pc_component";
 
 /**
  * ключ - назва характеристики
@@ -8,6 +8,10 @@ import { PCComponent, Spec } from "./pc_component";
  * значення - масив значень для фільтрації за характеристикою
  */
 export type Filters = { [specName: string]: unknown[] };
+
+export type AvailFilters = {
+  [specName: string]: { [specValue: string]: number };
+};
 
 /**
  * ключ - id комплектуючщого у збірці
@@ -44,6 +48,7 @@ export class Assembly implements AssemblyData {
     // ! [ComponentType.FAN]: [],
   };
 
+  // ! deprecated
   userFilters: Record<ComponentType, Filters> = {
     [ComponentType.MOTHERBOARD]: {},
     [ComponentType.CPU]: {},
@@ -73,31 +78,6 @@ export class Assembly implements AssemblyData {
    */
   removeComponent(id: number, componentType: ComponentType) {
     delete this.components[componentType][id];
-  }
-
-  setUserFilter(componentType: ComponentType, spec: Spec<unknown>) {
-    if (spec.name in this.userFilters[componentType]) {
-      // фільтри для цієї характеристики вже встановлено
-      const specFilter = this.userFilters[componentType][spec.name];
-      // індекс значення в масиві
-      const valueIndex = specFilter.indexOf(spec.value);
-
-      if (valueIndex == -1) {
-        // в масиві значень фільтру немає цього значення - додаємо його
-        specFilter.push(spec.value);
-      } else {
-        // в масиві значень фільтру є це значення - видаляємо його
-        specFilter.splice(valueIndex, 1);
-      }
-    } else {
-      // фільтри для цієї характеристики ще не встановлено - створюємо новий
-      // масив допустимих значень для характеристики
-      this.userFilters[componentType][spec.name] = [spec.value];
-    }
-  }
-
-  clearUserFilters(componentType: ComponentType) {
-    this.userFilters[componentType] = {};
   }
 
   clone() {

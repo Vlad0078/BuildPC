@@ -6,6 +6,9 @@ const theme = createTheme({
     primary: {
       main: indigo[500],
     },
+    secondary: {
+      main: "#666666",
+    },
   },
   components: {
     MuiAppBar: {
@@ -16,7 +19,6 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           marginBottom: 15,
-          // boxShadow: "none",
         },
       },
     },
