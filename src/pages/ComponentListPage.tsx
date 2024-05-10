@@ -6,7 +6,7 @@ import {
   useListLoadingState,
 } from "../store/assembly_store";
 import { useNavigate } from "react-router-dom";
-import { CircularProgress, Grid } from "@mui/material";
+import { CircularProgress, Grid, Typography } from "@mui/material";
 import ComponentCard from "../components/ComponentCard";
 import SearchAndFilter from "../components/SearchAndFilter";
 
@@ -20,43 +20,54 @@ const ComponentListPage: React.FC = () => {
   useEffect(() => {
     // якщо сторінку відкрили через рядок браузера і componentType не вказаний - повертаємо null і переходимо на сторінку збірки
     // ! його треба скидати при розмонтуванні сторінки, якщо зберігати збірку
-    !componentType && navigate("/");
+    if (!componentType) {
+      navigate("/");
+      window.scrollTo(0, 0);
+      // console.error("component type not provided");
+    }
   }, [componentType, navigate]);
 
-  if (!componentType) {
-    return null;
-  }
   return (
     <Grid container flexDirection="column" flexGrow={1}>
       {
         // поле пошуку лише якщо комплектуючі вже було завантажено
         (loadingState === LoadingState.LOADED ||
-          (loadingState === LoadingState.LOADING &&
-            components.length !== 0)) && <SearchAndFilter />
+          loadingState === LoadingState.RELOADING) && <SearchAndFilter />
       }
-      {
-        loadingState === LoadingState.LOADING ? (
-          <>
-            <Grid
-              container
-              flexDirection="column"
-              alignContent="center"
-              justifyContent="center"
-              flexGrow={1}
-            >
-              <CircularProgress size="8rem" />
+      {loadingState === LoadingState.LOADING ||
+      (loadingState === LoadingState.RELOADING && !components.length) ? (
+        <Grid item alignSelf="center" alignContent="center" flexGrow={1}>
+          <CircularProgress size="8rem" />
+        </Grid>
+      ) : (
+        <Grid container flexDirection="column" spacing={1} flexGrow={1}>
+          {loadingState === LoadingState.RELOADING && (
+            <Grid item alignSelf="center">
+              <CircularProgress size="3rem" />
             </Grid>
-          </>
-        ) : LoadingState.LOADED ? (
-          <Grid container flexDirection="column" spacing={1}>
-            {components.map((component) => (
+          )}
+          {components.length ? (
+            // комплектуючі
+            components.map((component) => (
               <Grid item key={component.id}>
                 <ComponentCard component={component} />
               </Grid>
-            ))}
-          </Grid>
-        ) : null // !
-      }
+            ))
+          ) : (
+            <Grid
+              item
+              alignSelf="center"
+              alignContent="center"
+              flexGrow={1}
+              padding="1rem !important"
+            >
+              <Typography variant="h4" textAlign="center">
+                {"Не знайдено комплектуючих за вашим запитом :("}
+              </Typography>
+            </Grid>
+          )}
+        </Grid>
+      )}
     </Grid>
   );
 };

@@ -180,3 +180,27 @@ export class Case extends PCComponent {
 }
 // ! export class CPUCooler extends PCComponent {}
 // ! export class Fan extends PCComponent {}
+
+export const componentOfType = (
+  componentData: PCComponentData,
+  componentType: ComponentType
+): PCComponent => {
+  switch (componentType) {
+    case ComponentType.MOTHERBOARD:
+      return new Motherboard(componentData);
+    case ComponentType.CPU:
+      return new CPU(componentData);
+    case ComponentType.GPU:
+      return new GPU(componentData);
+    case ComponentType.RAM:
+      return new RAM(componentData);
+    case ComponentType.SSD:
+      return new SSD(componentData);
+    case ComponentType.HDD:
+      return new HDD(componentData);
+    case ComponentType.POWER_SUPPLY:
+      return new PowerSupply(componentData);
+    case ComponentType.CASE:
+      return new Case(componentData);
+  }
+};

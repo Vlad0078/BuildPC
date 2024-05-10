@@ -1,6 +1,6 @@
 import { Assembly, AvailFilters, Filters } from "../models/assembly";
 import { ComponentType } from "../models/component_types";
-import { CPU, PCComponent, Spec } from "../models/pc_component";
+import { PCComponent, Spec } from "../models/pc_component";
 
 import ComponentService from "../services/component_service";
 import { createWithEqualityFn } from "zustand/traditional";
@@ -9,6 +9,7 @@ import { shallow } from "zustand/shallow";
 export enum ListLoadingState {
   INITIAL,
   LOADING,
+  RELOADING,
   LOADED,
   FAILED,
 }
@@ -17,6 +18,7 @@ interface ComponentListState {
   loadingState: ListLoadingState;
   componentType: ComponentType | undefined;
   components: PCComponent[];
+  searchQuery: string;
   availFilters: AvailFilters;
 }
 
@@ -44,33 +46,10 @@ const initialAssemblyState: AssemblyState = {
     loadingState: ListLoadingState.INITIAL,
     componentType: undefined,
     components: [],
+    searchQuery: "",
     availFilters: {},
   },
 };
-
-// !
-initialAssemblyState.assembly.addComponent(
-  new CPU({
-    id: 3534,
-    imageBig: "",
-    imageSmall: "",
-    link: "",
-    name: "Amd Ryzen 5 3500",
-    price: 2000,
-    specs: { d: new Spec("d", "d", ComponentType.CPU) },
-  })
-);
-initialAssemblyState.assembly.addComponent(
-  new CPU({
-    id: 3534,
-    imageBig: "",
-    imageSmall: "",
-    link: "",
-    name: "Amd Ryzen 5 3500",
-    price: 2000,
-    specs: { d: new Spec("d", "d", ComponentType.CPU) },
-  })
-);
 
 // !* никода не экспортируем сам хук с его методами доступа к хранилищу! //?
 const useAssemblyStore = createWithEqualityFn<AssemblyState>(
@@ -125,6 +104,13 @@ export const useCheckFilterActive = (spec: Spec<string>): boolean => {
 };
 
 // * методи для роботи зі збіркою
+export const addComponent = (component: PCComponent) => {
+  const state = useAssemblyStore.getState();
+  const newAssembly = state.assembly.clone();
+  newAssembly.addComponent(component);
+  useAssemblyStore.setState({ assembly: newAssembly });
+};
+
 export const removeComponent = (id: number, componentType: ComponentType) => {
   const state = useAssemblyStore.getState();
   const newAssembly = state.assembly.clone();
@@ -190,21 +176,35 @@ export const checkIfFilterActive = (spec: Spec<string>): boolean => {
 };
 
 // * методи для завантаження списку комплектуючих
-export const loadComponentList = async (componentType?: ComponentType) => {
+export const setComponentListType = (componentType: ComponentType) => {
+  useAssemblyStore.setState({
+    loadedComponents: {
+      ...initialAssemblyState.loadedComponents,
+      componentType,
+    },
+  });
+};
+
+export const loadComponentList = async (searchQuery?: string) => {
   const state = useAssemblyStore.getState();
-  if (!componentType) {
-    if (!state.loadedComponents.componentType)
-      throw new Error("component type not provided");
-    componentType = state.loadedComponents.componentType;
-  }
+  const componentType = state.loadedComponents.componentType;
+  if (!componentType) throw new Error("component type not provided");
   const loadedComponents = state.loadedComponents;
   const userFilters = state.userFilters[componentType];
+  if (searchQuery === undefined)
+    searchQuery = state.loadedComponents.searchQuery;
+
+  const loadingState =
+    state.loadedComponents.loadingState === ListLoadingState.LOADED ||
+    state.loadedComponents.loadingState === ListLoadingState.RELOADING
+      ? ListLoadingState.RELOADING
+      : ListLoadingState.LOADING;
 
   // переходимо в стан завантаження
   useAssemblyStore.setState({
     loadedComponents: {
       ...loadedComponents,
-      loadingState: ListLoadingState.LOADING,
+      loadingState,
       componentType,
     },
   });
@@ -214,15 +214,15 @@ export const loadComponentList = async (componentType?: ComponentType) => {
     componentType,
     userFilters,
     1,
-    ""
-  ); // ! hardcode
+    searchQuery
+  );
 
   // отримуємо доступні фільтри
   const availFilters = await ComponentService.fetchAvailFilters(
     componentType,
     userFilters,
-    ""
-  ); // ! hardcode
+    searchQuery
+  );
 
   // переходимо в стан із завантаженими комплектуючими
   useAssemblyStore.setState({
@@ -231,6 +231,7 @@ export const loadComponentList = async (componentType?: ComponentType) => {
       loadingState: ListLoadingState.LOADED,
       availFilters,
       componentType,
+      searchQuery,
     },
   });
 };

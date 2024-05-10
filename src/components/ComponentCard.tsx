@@ -11,15 +11,29 @@ import React, { useState } from "react";
 import { PCComponent } from "../models/pc_component";
 import { removeComponent } from "../store/assembly_store";
 import noImage from "../assets/no_image_placeholder.jpg";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles(() => ({
-  twoLineTypography: {
+  titleTypography: {
     display: "-webkit-box",
     overflow: "hidden",
     "-webkit-line-clamp": 2,
     "-webkit-box-orient": "vertical",
     "@media (orientation: portrait)": {
       "-webkit-line-clamp": 3,
+    },
+  },
+
+  subtitleTypography: {
+    "@media (orientation: portrait)": {
+      display: "none",
+    },
+
+    "@media (orientation: landscape)": {
+      display: "-webkit-box",
+      overflow: "hidden",
+      "-webkit-box-orient": "vertical",
+      "-webkit-line-clamp": 2,
     },
   },
 }));
@@ -40,6 +54,8 @@ const ComponentCard: React.FC<ComponentCardProps> = ({
     component.imageSmall === ""
   );
 
+  const navigate = useNavigate();
+
   const handleDelete: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
     if (!isAssemblyComponent)
@@ -49,18 +65,21 @@ const ComponentCard: React.FC<ComponentCardProps> = ({
     removeComponent(componentId, component.componentType);
   };
 
-  const handleOpen: React.MouseEventHandler<HTMLDivElement> = () => {
-    console.log(component);
-
-    throw new Error("Not implemented");
-  };
-
   const specList = Object.values(component.specs);
   const specString = specList
     .map((spec) => `${spec.prettyName}: ${spec.prettyValue}`)
     .join(", ");
 
-  // const;
+  const handleOpen: React.MouseEventHandler<HTMLDivElement> = () => {
+    navigate("/component", {
+      state: {
+        component,
+        componentType: component.componentType,
+        isAssemblyComponent,
+      },
+    });
+    window.scrollTo(0, 0);
+  };
 
   return (
     <Card
@@ -90,32 +109,32 @@ const ComponentCard: React.FC<ComponentCardProps> = ({
             <Typography
               variant="h5"
               component="div"
-              className={classes.twoLineTypography}
+              className={classes.titleTypography}
             >
               {component.name}
             </Typography>
             <Typography
               color="text.secondary"
               variant="subtitle1"
-              sx={{
-                mt: 1.5,
-                "@media (orientation: portrait)": {
-                  display: "none",
-                },
-              }}
+              className={classes.subtitleTypography}
             >
               {specString}
             </Typography>
+            {!isAssemblyComponent && (
+              <Typography color="primary" variant="h6" component="div">
+                {component.price} грн
+              </Typography>
+            )}
           </Grid>
         </Grid>
       </CardContent>
       {isAssemblyComponent && (
         <CardActions>
-          <Button size="medium" color="primary">
+          <Button size="large" color="primary">
             Відкрити
           </Button>
-          <Button size="medium" color="error" onClick={handleDelete}>
-            Видалити зі збірки {componentId}
+          <Button size="large" color="error" onClick={handleDelete}>
+            Видалити зі збірки
           </Button>
         </CardActions>
       )}

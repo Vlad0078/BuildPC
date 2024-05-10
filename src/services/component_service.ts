@@ -1,16 +1,9 @@
 import axios, { AxiosResponse } from "axios";
 import {
-  CPU,
-  Case,
-  GPU,
-  HDD,
-  Motherboard,
   PCComponent,
   PCComponentData,
-  PowerSupply,
-  RAM,
-  SSD,
   Spec,
+  componentOfType,
 } from "../models/pc_component";
 import { ComponentType } from "../models/component_types";
 import { AvailFilters, Filters } from "../models/assembly";
@@ -90,27 +83,7 @@ export default class ComponentService {
         specs: prettySpecs,
       };
 
-      switch (componentType) {
-        case ComponentType.MOTHERBOARD:
-          return new Motherboard(componentData);
-        case ComponentType.CPU:
-          return new CPU(componentData);
-        case ComponentType.GPU:
-          return new GPU(componentData);
-        case ComponentType.RAM:
-          return new RAM(componentData);
-        case ComponentType.SSD:
-          return new SSD(componentData);
-        case ComponentType.HDD:
-          return new HDD(componentData);
-        case ComponentType.POWER_SUPPLY:
-          return new PowerSupply(componentData);
-        case ComponentType.CASE:
-          return new Case(componentData);
-
-        default:
-          throw Error("Wrong component type");
-      }
+      return componentOfType(componentData, componentType);
     });
 
     return componentList;

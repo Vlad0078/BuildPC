@@ -11,14 +11,30 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import FilterDrawer from "./FilterDrawer";
+import { loadComponentList } from "../store/assembly_store";
 
 const SearchAndFilter: React.FC = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const handleFiltersButton = () => {
+  const handleSearch = () => {
+    loadComponentList(searchQuery); // componentType буде визначено всередині функції
+  };
+
+  const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleFiltersOpen = () => {
     setDrawerOpen(true);
   };
 
@@ -49,9 +65,11 @@ const SearchAndFilter: React.FC = () => {
           fullWidth
           placeholder="Пошук за назвою"
           type="search"
+          onChange={handleChange}
+          onKeyDown={handleSearchKeyDown}
           endAdornment={
             <InputAdornment position="end">
-              <IconButton aria-label="search">
+              <IconButton aria-label="search" onClick={handleSearch}>
                 <SearchIcon />
               </IconButton>
             </InputAdornment>
@@ -78,7 +96,7 @@ const SearchAndFilter: React.FC = () => {
           variant="outlined"
           endIcon={<FilterAltOutlinedIcon />}
           sx={{ height: "100%" }}
-          onClick={handleFiltersButton}
+          onClick={handleFiltersOpen}
         >
           Фільтрація
         </Button>

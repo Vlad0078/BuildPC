@@ -12,7 +12,7 @@ import React from "react";
 import { ComponentType } from "../models/component_types";
 import ComponentCard from "./ComponentCard";
 import { useNavigate } from "react-router-dom";
-import { useAssembly } from "../store/assembly_store";
+import { setComponentListType, useAssembly } from "../store/assembly_store";
 import { loadComponentList } from "../store/assembly_store";
 
 interface CellsAccordionProps {
@@ -30,8 +30,10 @@ const CellsAccordion: React.FC<CellsAccordionProps> = ({
   const componentList = Object.entries(components); // [id: component]
 
   const handleAdd = () => {
+    setComponentListType(componentType);
     navigate("/component_list");
-    loadComponentList(componentType);
+    window.scrollTo(0, 0);
+    loadComponentList();
   };
 
   return (

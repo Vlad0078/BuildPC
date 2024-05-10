@@ -3,6 +3,7 @@ import AssemblyPage from "./pages/AssemblyPage";
 import Header from "./components/Header";
 import { Grid } from "@mui/material";
 import ComponentListPage from "./pages/ComponentListPage";
+import ComponentPage from "./pages/ComponentPage";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Routes>
           <Route path="/" element={<AssemblyPage />} />
           <Route path="/component_list" element={<ComponentListPage />} />
+          <Route path="/component" element={<ComponentPage />} />
         </Routes>
       </Grid>
     </Grid>
