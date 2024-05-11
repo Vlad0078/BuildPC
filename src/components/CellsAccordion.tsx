@@ -32,7 +32,8 @@ const CellsAccordion: React.FC<CellsAccordionProps> = ({
   const handleAdd = () => {
     setComponentListType(componentType);
     navigate("/component_list");
-    window.scrollTo(0, 0);
+    const mainContainer = document.getElementById("main-container");
+    if (mainContainer) mainContainer.scrollTop = 0;
     loadComponentList();
   };
 

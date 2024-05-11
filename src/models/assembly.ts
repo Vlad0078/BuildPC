@@ -1,6 +1,6 @@
 import cloneDeep from "lodash.clonedeep";
 import { ComponentType } from "./component_types";
-import { PCComponent } from "./pc_component";
+import { PCComponent, componentOfType } from "./pc_component";
 
 /**
  * ключ - назва характеристики
@@ -30,6 +30,21 @@ export class Assembly implements AssemblyData {
     if (assemblyData) {
       assemblyData = cloneDeep(assemblyData);
       this.components = assemblyData.components;
+      // перетворюємо комплектуючі
+      for (const typeKey in this.components) {
+        const componentType = parseInt(typeKey) as ComponentType;
+        const componentsOfType = this.components[componentType];
+        for (const id in componentsOfType) {
+          const component = componentsOfType[id];
+          if (!(component instanceof PCComponent)) {
+            this.components[componentType][id] = componentOfType(
+              component,
+              componentType
+            );
+          }
+        }
+      }
+
       this.userFilters = assemblyData.userFilters;
       this.nextComponentId = assemblyData.nextComponentId;
     }

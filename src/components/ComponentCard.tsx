@@ -76,9 +76,11 @@ const ComponentCard: React.FC<ComponentCardProps> = ({
         component,
         componentType: component.componentType,
         isAssemblyComponent,
+        componentId,
       },
     });
-    window.scrollTo(0, 0);
+    const mainContainer = document.getElementById("main-container");
+    if (mainContainer) mainContainer.scrollTop = 0;
   };
 
   return (

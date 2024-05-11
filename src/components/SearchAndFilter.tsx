@@ -21,7 +21,7 @@ const SearchAndFilter: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = () => {
-    loadComponentList(searchQuery); // componentType буде визначено всередині функції
+    loadComponentList(1, searchQuery); // componentType буде визначено всередині функції
   };
 
   const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {

@@ -111,4 +111,27 @@ export default class ComponentService {
     const availFilters: AvailFilters = response.data;
     return availFilters;
   };
+
+  static countPages = async (
+    componentType: ComponentType,
+    userFilters: Filters,
+    searchQuery: string
+  ): Promise<number> => {
+    const categoryName = categoryNames[componentType];
+    let response: AxiosResponse;
+
+    // отримуємо дані з сервера
+    try {
+      response = await axios.post(`${host}/api/pages/${categoryName}`, {
+        userFilters,
+        compatibilytyFilters: {}, // !
+        searchQuery,
+      });
+    } catch (error) {
+      throw new Error("Couldn't get data from server");
+    }
+
+    const pages: number = response.data;
+    return pages;
+  };
 }

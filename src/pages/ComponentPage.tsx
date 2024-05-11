@@ -43,7 +43,8 @@ const ComponentPage: React.FC = () => {
   const handleAdd = () => {
     addComponent(component);
     navigate("/");
-    window.scrollTo(0, 0);
+    const mainContainer = document.getElementById("main-container");
+    if (mainContainer) mainContainer.scrollTop = 0;
   };
 
   return (

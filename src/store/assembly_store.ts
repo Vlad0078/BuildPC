@@ -5,6 +5,7 @@ import { PCComponent, Spec } from "../models/pc_component";
 import ComponentService from "../services/component_service";
 import { createWithEqualityFn } from "zustand/traditional";
 import { shallow } from "zustand/shallow";
+import { PersistStorage, persist } from "zustand/middleware";
 
 export enum ListLoadingState {
   INITIAL,
@@ -20,6 +21,8 @@ interface ComponentListState {
   components: PCComponent[];
   searchQuery: string;
   availFilters: AvailFilters;
+  page: number;
+  pages: number;
 }
 
 interface AssemblyState {
@@ -48,14 +51,41 @@ const initialAssemblyState: AssemblyState = {
     components: [],
     searchQuery: "",
     availFilters: {},
+    page: 1,
+    pages: 1,
   },
 };
 
+// * налаштування persist
+const storage: PersistStorage<AssemblyState> = {
+  getItem: (storageName: string) => {
+    const jsonData = localStorage.getItem(storageName);
+    if (!jsonData) return null;
+    const parsedData = JSON.parse(jsonData);
+
+    if ("assembly" in parsedData.state) {
+      parsedData.state.assembly = new Assembly(parsedData.state.assembly);
+    }
+
+    return parsedData;
+  },
+
+  setItem: (storageName: string, value: { state: AssemblyState }) => {
+    value.state = { ...initialAssemblyState, assembly: value.state.assembly };
+    localStorage.setItem(storageName, JSON.stringify(value));
+  },
+
+  removeItem: (name: string) => localStorage.removeItem(name),
+};
+
 // !* никода не экспортируем сам хук с его методами доступа к хранилищу! //?
-const useAssemblyStore = createWithEqualityFn<AssemblyState>(
-  () => ({
-    ...initialAssemblyState,
-  }),
+const useAssemblyStore = createWithEqualityFn<AssemblyState>()(
+  persist(
+    () => ({
+      ...initialAssemblyState,
+    }),
+    { name: "assemblyStore", storage }
+  ),
   shallow
 );
 
@@ -72,6 +102,12 @@ export const useListLoadingState = () =>
 
 export const useListComponentType = () =>
   useAssemblyStore((state) => state.loadedComponents.componentType);
+
+export const useListPage = () =>
+  useAssemblyStore((state) => state.loadedComponents.page);
+
+export const useListPages = () =>
+  useAssemblyStore((state) => state.loadedComponents.pages);
 
 export const useAvailFilters = () => {
   const availFilters = useAssemblyStore(
@@ -116,6 +152,10 @@ export const removeComponent = (id: number, componentType: ComponentType) => {
   const newAssembly = state.assembly.clone();
   newAssembly.removeComponent(id, componentType);
   useAssemblyStore.setState({ assembly: newAssembly });
+};
+
+export const resetStore = () => {
+  useAssemblyStore.setState(initialAssemblyState);
 };
 
 // повертає новий стан фільтру (true - активний, false - ні)
@@ -185,7 +225,10 @@ export const setComponentListType = (componentType: ComponentType) => {
   });
 };
 
-export const loadComponentList = async (searchQuery?: string) => {
+export const loadComponentList = async (
+  page: number = 1,
+  searchQuery?: string
+) => {
   const state = useAssemblyStore.getState();
   const componentType = state.loadedComponents.componentType;
   if (!componentType) throw new Error("component type not provided");
@@ -213,16 +256,31 @@ export const loadComponentList = async (searchQuery?: string) => {
   const newComponents = await ComponentService.fetchComponents(
     componentType,
     userFilters,
-    1,
+    page,
     searchQuery
   );
 
-  // отримуємо доступні фільтри
-  const availFilters = await ComponentService.fetchAvailFilters(
-    componentType,
-    userFilters,
-    searchQuery
-  );
+  // отримуємо к-ть сторінок та доступні фільтри, якщо завантажуємо першу сторінку
+  let availFilters: AvailFilters;
+  let pages: number;
+  if (page === 1) {
+    // сторінки
+    pages = await ComponentService.countPages(
+      componentType,
+      userFilters,
+      searchQuery
+    );
+
+    // доступні фільтри
+    availFilters = await ComponentService.fetchAvailFilters(
+      componentType,
+      userFilters,
+      searchQuery
+    );
+  } else {
+    availFilters = state.loadedComponents.availFilters;
+    pages = state.loadedComponents.pages;
+  }
 
   // переходимо в стан із завантаженими комплектуючими
   useAssemblyStore.setState({
@@ -232,6 +290,8 @@ export const loadComponentList = async (searchQuery?: string) => {
       availFilters,
       componentType,
       searchQuery,
+      page,
+      pages,
     },
   });
 };

@@ -47,13 +47,11 @@ export const specNames: Record<ComponentType, classifiedSpecNames> = {
       fan_4pin: "4-pin для вентилятора",
       height: "Висота, мм",
       width: "Ширина, мм",
+      lan_speed: "Швидкість LAN портів",
     },
     bool_spec_names: {
       dual_channel_support: "Підтримка двоканального режиму",
       ecc_support: "Підтримка ECC",
-    },
-    other_spec_names: {
-      lan_speed: "Швидкість LAN портів",
     },
   },
 
@@ -80,7 +78,6 @@ export const specNames: Record<ComponentType, classifiedSpecNames> = {
       max_tdp: "Максимальний TDP",
       techprocess: "Техпроцес",
       max_total_ram: "Максимальний обсяг оперативной пам'яті",
-      max_ram_frequency: "Максимальна швидкодія пам'яті",
       memory_channels: "Кількість каналів пам'яті",
       max_temperature: "Максимально допустима температура",
     },
@@ -93,6 +90,7 @@ export const specNames: Record<ComponentType, classifiedSpecNames> = {
       max_frequency: "Максимальна тактова частота процесора",
       base_graphics_frequency: "Базова частота графічного процесора",
       max_graphics_frequency: "Максимальна частота графічного процесора",
+      max_ram_frequency: "Максимальна швидкодія пам'яті",
     },
     bool_spec_names: {
       unlocked_multiplier: "Розблокований множник",
@@ -176,8 +174,6 @@ export const specNames: Record<ComponentType, classifiedSpecNames> = {
     int_spec_names: {
       read_speed: "Швидкість читання",
       write_speed: "Швидкість запису",
-    },
-    other_spec_names: {
       volume: "Об'єм пам'яті",
       power_consumption: "Енергоспоживання",
     },
@@ -196,8 +192,6 @@ export const specNames: Record<ComponentType, classifiedSpecNames> = {
       buffer_size: "Розмір буферу",
       data_speed: "Швидкість передачі даних",
       noise_level: "Рівень шуму",
-    },
-    other_spec_names: {
       volume: "Об’єм",
     },
   },
@@ -219,7 +213,7 @@ export const specNames: Record<ComponentType, classifiedSpecNames> = {
     },
     int_spec_names: {
       power: "Потужність",
-      n_gpu_connectors: "Кіл-ть роз'ємів додаткового живлення для відеокарт",
+      n_gpu_connectors: "Кількість роз'ємів додаткового живлення для відеокарт",
       n_sata_connectors: "Кількість роз'ємів SATA",
       n_peripheral_connectors: "Кількість роз'ємів Peripheral",
       n_fdd_connectors: "Кількість роз'ємів FDD",
@@ -234,6 +228,7 @@ export const specNames: Record<ComponentType, classifiedSpecNames> = {
       series: "Серія",
       psu_plasement: "Розташування блоку живлення",
       places_for_additional_fans: "Місця для додаткових вентиляторів",
+      cooling_elements: "Охолоджуючі елементи",
       external_connectors: "Зовнішні роз'єми",
       special_features: "Особливості",
       case_matherial: "Матеріал корпусу",
@@ -247,13 +242,12 @@ export const specNames: Record<ComponentType, classifiedSpecNames> = {
       n_drive_bay_3_5: 'Кількіть внутрішніх відсіків 3.5"',
       n_drive_bay_2_5: 'Кількість внутрішніх відсіків 2.5 "',
       n_expansion_slots: "Кількість слотів розширення",
-      cooling_elements: "Охолоджуючі елементи",
       max_gpu_length: "Встановлення довгих відеокарт",
       max_cpu_cooler_height: "Максимальна висота процесорного кулера",
       max_psu_length: "Максимальна довжина БЖ",
     },
     float_spec_names: {
-      weight: "Вага, кг",
+      weight: "Вага",
     },
     bool_spec_names: {
       dust_filter: "Пиловий фільтр",

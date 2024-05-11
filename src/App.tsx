@@ -7,23 +7,27 @@ import ComponentPage from "./pages/ComponentPage";
 
 function App() {
   return (
-    <Grid container flexDirection="column" minHeight="100%">
+    <Grid container flexDirection="column" height="100%" wrap="nowrap">
       <Grid item>
         <Header />
       </Grid>
       <Grid
         container
         flexDirection="column"
-        alignSelf="center"
+        alignItems="center"
         flexGrow={1}
-        maxWidth="lg"
+        overflow="hidden auto"
+        id="main-container"
+        sx={{ pt: 2 }}
       >
-        {/* // * маршрути */}
-        <Routes>
-          <Route path="/" element={<AssemblyPage />} />
-          <Route path="/component_list" element={<ComponentListPage />} />
-          <Route path="/component" element={<ComponentPage />} />
-        </Routes>
+        <Grid container flexDirection="column" flexGrow={1} maxWidth="lg">
+          {/* // * маршрути */}
+          <Routes>
+            <Route path="/" element={<AssemblyPage />} />
+            <Route path="/component_list" element={<ComponentListPage />} />
+            <Route path="/component" element={<ComponentPage />} />
+          </Routes>
+        </Grid>
       </Grid>
     </Grid>
   );

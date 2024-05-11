@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { CircularProgress, Grid, Typography } from "@mui/material";
 import ComponentCard from "../components/ComponentCard";
 import SearchAndFilter from "../components/SearchAndFilter";
+import ListPages from "../components/ListPages";
 
 const ComponentListPage: React.FC = () => {
   const navigate = useNavigate();
@@ -22,7 +23,8 @@ const ComponentListPage: React.FC = () => {
     // ! його треба скидати при розмонтуванні сторінки, якщо зберігати збірку
     if (!componentType) {
       navigate("/");
-      window.scrollTo(0, 0);
+      const mainContainer = document.getElementById("main-container");
+      if (mainContainer) mainContainer.scrollTop = 0;
       // console.error("component type not provided");
     }
   }, [componentType, navigate]);
@@ -48,11 +50,16 @@ const ComponentListPage: React.FC = () => {
           )}
           {components.length ? (
             // комплектуючі
-            components.map((component) => (
-              <Grid item key={component.id}>
-                <ComponentCard component={component} />
+            <>
+              {components.map((component) => (
+                <Grid item key={component.id}>
+                  <ComponentCard component={component} />
+                </Grid>
+              ))}
+              <Grid item sx={{ mt: "0.5rem", mb: "1rem" }} alignSelf="center">
+                <ListPages></ListPages>
               </Grid>
-            ))
+            </>
           ) : (
             <Grid
               item
