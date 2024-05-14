@@ -62,7 +62,7 @@ const ComponentCard: React.FC<ComponentCardProps> = ({
       throw new Error("can't remove a component outside of an assembly");
     if (componentId === undefined)
       throw new Error("can't remove a component without an id");
-    removeComponent(componentId, component.componentType);
+    removeComponent(componentId, component);
   };
 
   const specList = Object.values(component.specs);

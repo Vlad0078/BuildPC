@@ -29,7 +29,7 @@ export class Spec<T> {
     let parsedValue;
     if (this.name in stringSpecNames) {
       this.prettyName = stringSpecNames[this.name];
-      this.prettyValue = `${this.value}`.replace(/[\n\t]/g, ""); // !
+      this.prettyValue = `${this.value}`; // ! .replace(/[\n\t]/g, "") - вже на сервері
     } else if (this.name in intSpecNames) {
       this.prettyName = intSpecNames[this.name];
       switch (this.name) {

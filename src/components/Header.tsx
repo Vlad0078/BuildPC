@@ -10,7 +10,11 @@ import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import MenuIcon from "@mui/icons-material/Menu";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { PCComponentData, componentOfType } from "../models/pc_component";
+import {
+  PCComponent,
+  PCComponentData,
+  componentOfType,
+} from "../models/pc_component";
 import { ComponentType } from "../models/component_types";
 import {
   addComponent,
@@ -71,9 +75,9 @@ const Header: React.FC = () => {
 
   const handleRemoveComponent = () => {
     const componentId: number = location.state.componentId;
-    const componentType: ComponentType = location.state.componentType;
+    const component: PCComponent = location.state.component;
 
-    removeComponent(componentId, componentType);
+    removeComponent(componentId, component);
     navigate("/");
     const mainContainer = document.getElementById("main-container");
     if (mainContainer) mainContainer.scrollTop = 0;

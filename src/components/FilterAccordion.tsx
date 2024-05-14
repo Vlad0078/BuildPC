@@ -24,12 +24,14 @@ const FilterAccordion: React.FC<FilterAccordionProps> = ({
   componentType,
 }) => {
   const availValues = Object.keys(availFilters[specName]);
-  const specs = availValues.map(
-    (specValue) => new Spec(specName, specValue, componentType)
-  );
+
+  const specs = availValues
+    .map((specValue) => new Spec(specName, specValue, componentType))
+    .filter((spec) => spec != undefined);
 
   return (
     <Accordion
+      defaultExpanded
       disableGutters // щоб заголовок не опускався при розкритті акордеона
       sx={{
         boxShadow: "none",

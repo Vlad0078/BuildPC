@@ -53,7 +53,12 @@ const FilterDrawer: React.FC<FilterDrawerProps> = ({
         >
           Очистити фільтри
         </Button>
-        <Grid container flexDirection="column" sx={{ maxWidth: "800px" }}>
+        <Grid
+          container
+          flexDirection="column"
+          maxWidth={"calc(100vw - 20px)"}
+          sx={{ width: "800px" }}
+        >
           <Grid container flexDirection="column" spacing={4}>
             {Object.keys(availFilters).map((specName, index) => (
               <Grid item key={index}>

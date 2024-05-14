@@ -7,9 +7,10 @@ import {
 } from "../models/pc_component";
 import { ComponentType } from "../models/component_types";
 import { AvailFilters, Filters } from "../models/assembly";
+import CompatibilityFilters from "../models/compatibilityFilters";
 
-const host = "https://buildpcserver.onrender.com"; // !
-// const host = "http://192.168.0.106:5000"; // !
+// const host = "https://buildpcserver.onrender.com"; // !
+const host = "http://192.168.0.106:5000"; // !
 
 const categoryNames: Record<ComponentType, string> = {
   [ComponentType.MOTHERBOARD]: "motherboard",
@@ -38,6 +39,7 @@ export default class ComponentService {
   static fetchComponents = async (
     componentType: ComponentType,
     userFilters: Filters,
+    compatibilityFilters: CompatibilityFilters,
     page: number,
     searchQuery: string
   ): Promise<PCComponent[]> => {
@@ -49,7 +51,7 @@ export default class ComponentService {
         `${host}/api/components/${categoryName}/${page}`,
         {
           userFilters,
-          compatibilytyFilters: {}, // !
+          compatibilityFilters, // *
           searchQuery,
         }
       );
@@ -92,6 +94,7 @@ export default class ComponentService {
   static fetchAvailFilters = async (
     componentType: ComponentType,
     userFilters: Filters,
+    compatibilityFilters: CompatibilityFilters,
     searchQuery: string
   ): Promise<AvailFilters> => {
     const categoryName = categoryNames[componentType];
@@ -101,7 +104,7 @@ export default class ComponentService {
     try {
       response = await axios.post(`${host}/api/filters_avail/${categoryName}`, {
         userFilters,
-        compatibilytyFilters: {}, // !
+        compatibilityFilters,
         searchQuery,
       });
     } catch (error) {
@@ -115,6 +118,7 @@ export default class ComponentService {
   static countPages = async (
     componentType: ComponentType,
     userFilters: Filters,
+    compatibilityFilters: CompatibilityFilters,
     searchQuery: string
   ): Promise<number> => {
     const categoryName = categoryNames[componentType];
@@ -124,7 +128,7 @@ export default class ComponentService {
     try {
       response = await axios.post(`${host}/api/pages/${categoryName}`, {
         userFilters,
-        compatibilytyFilters: {}, // !
+        compatibilityFilters,
         searchQuery,
       });
     } catch (error) {

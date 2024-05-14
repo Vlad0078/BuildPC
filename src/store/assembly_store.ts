@@ -147,10 +147,10 @@ export const addComponent = (component: PCComponent) => {
   useAssemblyStore.setState({ assembly: newAssembly });
 };
 
-export const removeComponent = (id: number, componentType: ComponentType) => {
+export const removeComponent = (id: number, component: PCComponent) => {
   const state = useAssemblyStore.getState();
   const newAssembly = state.assembly.clone();
-  newAssembly.removeComponent(id, componentType);
+  newAssembly.removeComponent(id, component);
   useAssemblyStore.setState({ assembly: newAssembly });
 };
 
@@ -256,6 +256,7 @@ export const loadComponentList = async (
   const newComponents = await ComponentService.fetchComponents(
     componentType,
     userFilters,
+    state.assembly.compatibilityFilters,
     page,
     searchQuery
   );
@@ -268,6 +269,7 @@ export const loadComponentList = async (
     pages = await ComponentService.countPages(
       componentType,
       userFilters,
+      state.assembly.compatibilityFilters,
       searchQuery
     );
 
@@ -275,6 +277,7 @@ export const loadComponentList = async (
     availFilters = await ComponentService.fetchAvailFilters(
       componentType,
       userFilters,
+      state.assembly.compatibilityFilters,
       searchQuery
     );
   } else {

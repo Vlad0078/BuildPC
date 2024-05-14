@@ -6,16 +6,16 @@ const AssemblyPage: React.FC = () => {
   return (
     <>
       <CellsAccordion
+        componentType={ComponentType.MOTHERBOARD}
+        summaryText="Материнська плата"
+      />
+      <CellsAccordion
         componentType={ComponentType.CPU}
         summaryText="Процесор"
       />
       <CellsAccordion
         componentType={ComponentType.GPU}
         summaryText="Відеокарта"
-      />
-      <CellsAccordion
-        componentType={ComponentType.MOTHERBOARD}
-        summaryText="Материнська плата"
       />
       <CellsAccordion
         componentType={ComponentType.RAM}
