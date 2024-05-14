@@ -13,7 +13,6 @@ import { ComponentType } from "../models/component_types";
 import ComponentCard from "./ComponentCard";
 import { useNavigate } from "react-router-dom";
 import { setComponentListType, useAssembly } from "../store/assembly_store";
-import { loadComponentList } from "../store/assembly_store";
 
 interface CellsAccordionProps {
   summaryText: string;
@@ -36,7 +35,6 @@ const CellsAccordion: React.FC<CellsAccordionProps> = ({
     navigate("/component_list");
     const mainContainer = document.getElementById("main-container");
     if (mainContainer) mainContainer.scrollTop = 0;
-    loadComponentList();
   };
 
   // * визначаємо к-ть комплектуючих цього типу

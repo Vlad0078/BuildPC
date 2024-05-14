@@ -71,7 +71,14 @@ const storage: PersistStorage<AssemblyState> = {
   },
 
   setItem: (storageName: string, value: { state: AssemblyState }) => {
-    value.state = { ...initialAssemblyState, assembly: value.state.assembly };
+    value.state = {
+      ...initialAssemblyState,
+      assembly: value.state.assembly,
+      loadedComponents: {
+        ...initialAssemblyState.loadedComponents,
+        componentType: value.state.loadedComponents.componentType,
+      },
+    };
     localStorage.setItem(storageName, JSON.stringify(value));
   },
 

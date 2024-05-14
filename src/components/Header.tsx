@@ -7,46 +7,23 @@ import {
   Typography,
 } from "@mui/material";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
-import MenuIcon from "@mui/icons-material/Menu";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  PCComponent,
-  PCComponentData,
-  componentOfType,
-} from "../models/pc_component";
-import { ComponentType } from "../models/component_types";
-import {
-  addComponent,
-  clearUserFilters,
-  loadComponentList,
-  removeComponent,
-  resetStore,
-} from "../store/assembly_store";
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  menuText: string;
+  menuAction: () => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ menuText, menuAction }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const isHomePage = location.pathname === "/";
 
   const handleLogoClick = () => navigate("/");
 
-  const handleGoBack = () => {
-    let destinationPage: string;
-    switch (location.pathname) {
-      case "/component":
-        destinationPage = location.state.isAssemblyComponent
-          ? "/"
-          : "/component_list";
-        break;
-      case "/component_list":
-      default:
-        destinationPage = "";
-        break;
-    }
-
-    navigate(destinationPage);
-  };
+  const handleGoBack = () => navigate(-1);
 
   // * меню
   const [menuAnchor, setMenuAnchor] = React.useState<null | HTMLElement>(null);
@@ -60,46 +37,8 @@ const Header: React.FC = () => {
     setMenuAnchor(null);
   };
 
-  const handleAddComponent = () => {
-    const componentData: PCComponentData = location.state.component;
-    const componentType: ComponentType = location.state.componentType;
-    const component = componentOfType(componentData, componentType);
-
-    addComponent(component);
-    navigate("/");
-    const mainContainer = document.getElementById("main-container");
-    if (mainContainer) mainContainer.scrollTop = 0;
-
-    setMenuAnchor(null);
-  };
-
-  const handleRemoveComponent = () => {
-    const componentId: number = location.state.componentId;
-    const component: PCComponent = location.state.component;
-
-    removeComponent(componentId, component);
-    navigate("/");
-    const mainContainer = document.getElementById("main-container");
-    if (mainContainer) mainContainer.scrollTop = 0;
-
-    setMenuAnchor(null);
-  };
-
-  const handleReloadList = () => {
-    clearUserFilters();
-    loadComponentList(1, "");
-
-    const mainContainer = document.getElementById("main-container");
-    if (mainContainer) mainContainer.scrollTop = 0;
-
-    setMenuAnchor(null);
-  };
-
-  const handleResetAssembly = () => {
-    resetStore();
-    const mainContainer = document.getElementById("main-container");
-    if (mainContainer) mainContainer.scrollTop = 0;
-
+  const handleMenuAction = () => {
+    menuAction();
     setMenuAnchor(null);
   };
 
@@ -138,25 +77,10 @@ const Header: React.FC = () => {
           color="inherit"
           onClick={handleOpenMenu}
         >
-          <MenuIcon />
+          <MoreVertIcon />
         </IconButton>
         <Menu anchorEl={menuAnchor} open={menuOpen} onClose={handleCloseMenu}>
-          {location.pathname === "/" && (
-            <MenuItem onClick={handleResetAssembly}>Скинути збірку</MenuItem>
-          )}
-          {location.pathname === "/component_list" && (
-            <MenuItem onClick={handleReloadList}>
-              Скинути фільтри та оновити список
-            </MenuItem>
-          )}
-          {location.pathname === "/component" &&
-            (location.state.isAssemblyComponent ? (
-              <MenuItem onClick={handleRemoveComponent}>
-                Видалити зі збірки
-              </MenuItem>
-            ) : (
-              <MenuItem onClick={handleAddComponent}>Додати до збірки</MenuItem>
-            ))}
+          <MenuItem onClick={handleMenuAction}>{menuText}</MenuItem>
         </Menu>
       </Toolbar>
     </AppBar>
