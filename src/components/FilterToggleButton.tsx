@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Spec } from "../models/pc_component";
+import { Spec } from "../models/spec";
 import {
   checkIfFilterActive,
   toggleUserFilter,

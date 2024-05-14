@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import React from "react";
-import { Spec } from "../models/pc_component";
+import { Spec } from "../models/spec";
 import { ComponentType } from "../models/component_types";
 import { AvailFilters } from "../models/assembly";
 import FilterToggleButton from "./FilterToggleButton";

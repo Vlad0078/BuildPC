@@ -2,9 +2,8 @@ import axios, { AxiosResponse } from "axios";
 import {
   PCComponent,
   PCComponentData,
-  Spec,
-  componentOfType,
 } from "../models/pc_component";
+import { Spec } from "../models/spec";
 import { ComponentType } from "../models/component_types";
 import { AvailFilters, Filters } from "../models/assembly";
 import CompatibilityFilters from "../models/compatibilityFilters";
@@ -21,8 +20,6 @@ const categoryNames: Record<ComponentType, string> = {
   [ComponentType.HDD]: "hdd",
   [ComponentType.POWER_SUPPLY]: "power_supply",
   [ComponentType.CASE]: "case",
-  // ! CPU_COOLER = 9,
-  // ! FAN = 10
 };
 
 interface ServerPCComponentData {
@@ -61,7 +58,7 @@ export default class ComponentService {
 
     const data: ServerPCComponentData[] = response.data; // масив комплектуючих з сервера
     const componentList: PCComponent[] = data.map((component) => {
-      // видаляємо характеристики, для яких не вказане значення // !
+      // видаляємо характеристики, для яких не вказане значення
       const specs = component.specs;
       Object.keys(specs).forEach((key) => {
         if (specs[key] === null) {
@@ -82,10 +79,11 @@ export default class ComponentService {
         link: component["link"],
         imageSmall: component["image_small"],
         imageBig: component["image_big"],
-        specs: prettySpecs,
+				specs: prettySpecs,
+				componentType,
       };
 
-      return componentOfType(componentData, componentType);
+      return new PCComponent(componentData);
     });
 
     return componentList;

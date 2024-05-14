@@ -74,7 +74,6 @@ const ComponentCard: React.FC<ComponentCardProps> = ({
     navigate("/component", {
       state: {
         component,
-        componentType: component.componentType,
         isAssemblyComponent,
         componentId,
       },

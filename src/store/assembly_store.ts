@@ -1,6 +1,7 @@
 import { Assembly, AvailFilters, Filters } from "../models/assembly";
 import { ComponentType } from "../models/component_types";
-import { PCComponent, Spec } from "../models/pc_component";
+import { PCComponent } from "../models/pc_component";
+import { Spec } from "../models/spec";
 
 import ComponentService from "../services/component_service";
 import { createWithEqualityFn } from "zustand/traditional";
@@ -102,7 +103,7 @@ export const useAssembly = () =>
 
 export const useComponentList = () =>
   useAssemblyStore((state) => state.loadedComponents.components).map(
-    (component) => component.clone()
+    (component) => new PCComponent(component)
   );
 export const useListLoadingState = () =>
   useAssemblyStore((state) => state.loadedComponents.loadingState);

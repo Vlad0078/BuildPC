@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { PCComponentData, componentOfType } from "../models/pc_component";
+import { PCComponent, PCComponentData } from "../models/pc_component";
 import {
   Fab,
   Grid,
@@ -16,7 +16,6 @@ import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import noImage from "../assets/no_image_placeholder.jpg";
 import SpecTable from "../components/SpecTable";
 import { addComponent, removeComponent } from "../store/assembly_store";
-import { ComponentType } from "../models/component_types";
 import Header from "../components/Header";
 
 const ComponentPage: React.FC = () => {
@@ -41,13 +40,12 @@ const ComponentPage: React.FC = () => {
   }
 
   const componentData: PCComponentData = location.state.component;
-  const componentType: ComponentType = location.state.componentType;
   const isAssemblyComponent: boolean = location.state.isAssemblyComponent;
   const componentId = isAssemblyComponent
     ? (location.state.componentId as number)
     : null;
 
-  const component = componentOfType(componentData, componentType);
+  const component = new PCComponent(componentData);
 
   const handleAdd = () => {
     addComponent(component);

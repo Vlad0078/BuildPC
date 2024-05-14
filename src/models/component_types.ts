@@ -7,6 +7,4 @@ export enum ComponentType {
   HDD = 6,
   POWER_SUPPLY = 7,
   CASE = 8,
-  // ! CPU_COOLER = 9,
-  // ! FAN = 10
 }

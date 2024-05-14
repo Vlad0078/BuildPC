@@ -6,7 +6,7 @@ import {
   TableBody,
 } from "@mui/material";
 import React from "react";
-import { Spec } from "../models/pc_component";
+import { Spec } from "../models/spec";
 
 interface SpecTableProps {
   specs: Record<string, Spec<unknown>>;

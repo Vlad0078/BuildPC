@@ -1,6 +1,7 @@
 import cloneDeep from "lodash.clonedeep";
 import { ComponentType } from "./component_types";
-import { PCComponent, Spec, componentOfType } from "./pc_component";
+import { PCComponent } from "./pc_component";
+import { Spec } from "./spec";
 import CompatibilityFilters from "./compatibilityFilters";
 
 /**
@@ -37,12 +38,7 @@ export class Assembly implements AssemblyData {
         const componentsOfType = this.components[componentType];
         for (const id in componentsOfType) {
           const component = componentsOfType[id];
-          if (!(component instanceof PCComponent)) {
-            this.components[componentType][id] = componentOfType(
-              component,
-              componentType
-            );
-          }
+          this.components[componentType][id] = new PCComponent(component);
         }
       }
 
@@ -60,8 +56,6 @@ export class Assembly implements AssemblyData {
     [ComponentType.HDD]: {},
     [ComponentType.POWER_SUPPLY]: {},
     [ComponentType.CASE]: {},
-    // ! [ComponentType.CPU_COOLER]: [],
-    // ! [ComponentType.FAN]: [],
   };
 
   nextComponentId: number = 0;
